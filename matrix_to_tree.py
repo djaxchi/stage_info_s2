@@ -1,5 +1,6 @@
 from typing import FrozenSet
-from djelora_finale import *
+from matrix_proper_compatible import *
+from matrix import *
 from graph import *
 from Louvain import *
 import networkx as nx
@@ -15,7 +16,7 @@ def finish(M, g):
     return False
 
 
-def substitut(M, y):
+def inverse_colonne(M, y):
     for i in range(len(M.matrix)):
         if i in M.co_column(y):
             M.matrix[i][y] = 1
@@ -38,7 +39,7 @@ def Hierarchie(M, g):
             if len(sub) != 0:
                 for y in sub:
                     H.remove(M.column(y))
-                    H.append(substitut(M, y))
+                    H.append(inverse_colonne(M, y))
     return H
 
 
@@ -91,6 +92,7 @@ def créer_edge(H, X, dico, arbre):
             X = e
             H = sous_ensembles(e, H)
             créer_edge(H, X, dico, arbre)
+    affiche(arbre)
     return arbre
 
 
@@ -104,7 +106,7 @@ def dico_labeling(H):
     return dico
 
 
-def ARBRE_SVP(M, G):
+def cree_arbre(M, G):
     arbre = nx.Graph()
     H = H_final(Hierarchie(M, G), M)
     dico = dico_labeling(H)
@@ -113,9 +115,9 @@ def ARBRE_SVP(M, G):
     H.remove(X)
     return créer_edge(H, X, dico, arbre)
 
-'''
+
 g = nx.Graph()
 m = Matrix.load("test.csv")
 for i in range(len(m.matrix[0])):
     g.add_node(i)
-affiche(ARBRE_SVP(m, g))'''
+print(cree_arbre(m, g))
