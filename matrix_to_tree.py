@@ -1,7 +1,6 @@
 from typing import FrozenSet
 from matrix_proper_compatible import *
 from matrix import *
-from graph import *
 from Louvain import *
 import networkx as nx
 import csv
