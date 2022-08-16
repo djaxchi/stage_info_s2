@@ -24,7 +24,6 @@ def patch_up(m):  # renvoie une matrice dont le graphe de buneman est complet
     if (
         len(g.edges) == (len(g.nodes) * (len(g.nodes) - 1)) // 2
     ):  # condition nécéssaire a la fin de l'algo
-        print(type(m))
         return m
     c = 0
     card_E = len(E)
@@ -88,8 +87,6 @@ def patch_up(m):  # renvoie une matrice dont le graphe de buneman est complet
                     m, dico_remplacent[ligne], couple_omega_choisi_cdo[0], ligne
                 )
                 g = m.buneman_graph()
-            print(dico_remplacent[ligne], couple_omega_choisi_cdo[0], ligne)
-            print(m)
             return patch_up(m)
 
     return False
@@ -154,7 +151,6 @@ def trouve_remplacant(m, c, o, ligne):
         if cdr_test <= cdr:  # on garantit un candidat optimale
             cdr = cdr_test
             r = candidat
-    print(r)
     return (r, cdr)
 
 
@@ -192,22 +188,27 @@ def modifie_ligne(
 def matrices_louvain(m):
     mat = []
     g = m.buneman_graph()
+    taille = len(g.nodes())
+    if taille < 15:
+        q = 15
+    if taille < 30:
+        q = 40
+    q = 500
     sujet = m.matrix
-    nouv_col = louvain(g)[0]
+    nouv_col = louvain(g,qualité=q)[0]
     print(louvain(g)[0])
     for cols in nouv_col:
         nouv_matrice = []
-        for col in cols:
-
-            colonne = []
-            for i in sujet:
-                colonne.append(i[col])
-            nouv_matrice.append(colonne)
-        print(nouv_matrice)
+        for i in sujet:
+            ligne = []
+            for colonne in cols:
+                ligne.append(i[colonne])
+            nouv_matrice.append(ligne)
         mat.append(Matrix(nouv_matrice))
     return mat
 
 
+'''
 def louvain_feat_patching(M):
     done = False
     while done:
@@ -215,11 +216,4 @@ def louvain_feat_patching(M):
         if patch != False:
             return patch
         G = matrices_louvain.buneman_graph(M)
-
-
-m = Matrix.load("animaux.csv")
-print(m)
-for i in matrices_louvain(m):
-    print(i)
-for i in matrices_louvain(m):
-    print(patch_up(i))
+'''

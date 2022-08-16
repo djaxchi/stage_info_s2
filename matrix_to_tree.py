@@ -48,7 +48,6 @@ def H_final(H, M):
             H.append(frozenset([i]))
     X = frozenset([i for i in range(len(M.matrix))])
     H.append(X)
-    print(H_final)
     return H
 
 
@@ -76,22 +75,14 @@ def sous_ensembles(A, H):
 
 def créer_edge(H, X, dico, arbre):
     elem_max = elements_max(H)
-    print(elem_max, "la liste des element max dans", H)
     for e in elem_max:
         arbre.add_node(dico[e])
         arbre.add_edge(dico[e], dico[X])
-        print(
-            "j ai relié",
-            dico[e],
-            "a",
-            dico[X],
-        )
     for e in elements_max(H):
         if len(e) != 1:
             X = e
             H = sous_ensembles(e, H)
             créer_edge(H, X, dico, arbre)
-    affiche(arbre)
     return arbre
 
 
@@ -101,7 +92,6 @@ def dico_labeling(H):
     for A in H:
         dico[A] = c
         c += 1
-    print(dico)
     return dico
 
 
@@ -119,4 +109,3 @@ g = nx.Graph()
 m = Matrix.load("test.csv")
 for i in range(len(m.matrix[0])):
     g.add_node(i)
-print(cree_arbre(m, g))
